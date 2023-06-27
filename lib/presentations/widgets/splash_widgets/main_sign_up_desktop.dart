@@ -5,21 +5,21 @@ import 'package:provider/provider.dart';
 import 'package:portal/data/models/login_provider_result_model.dart';
 import 'package:portal/presentations/state_management/auth_provider.dart';
 
-class MainSignUp extends StatefulWidget {
+class MainSignUpDesktop extends StatefulWidget {
   final Function() switchBody;
   final LoginProviderResultModel? providerResult;
 
-  const MainSignUp({
+  const MainSignUpDesktop({
     super.key,
     required this.switchBody,
     this.providerResult,
   });
 
   @override
-  State<MainSignUp> createState() => _MainSignUpState();
+  State<MainSignUpDesktop> createState() => _MainSignUpDesktopState();
 }
 
-class _MainSignUpState extends State<MainSignUp> {
+class _MainSignUpDesktopState extends State<MainSignUpDesktop> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -402,24 +402,26 @@ class _MainSignUpState extends State<MainSignUp> {
                                           isAdmin: false);
                                 }
                               },
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(12))),
-                                constraints: const BoxConstraints(
-                                    maxHeight: 45,
-                                    maxWidth: 400,
-                                    minHeight: 30,
-                                    minWidth: 100),
-                                child: Center(
-                                    child: Text(
-                                  tr("continue"),
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w500),
-                                )),
+                              child: Center(
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(12))),
+                                  constraints: const BoxConstraints(
+                                      maxHeight: 45,
+                                      maxWidth: 360,
+                                      minHeight: 30,
+                                      minWidth: 100),
+                                  child: Center(
+                                      child: Text(
+                                    tr("continue"),
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.w500),
+                                  )),
+                                ),
                               ),
                             ),
                           ),

@@ -11,7 +11,8 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Showcase extends StatefulWidget {
-  const Showcase({super.key});
+  final double width;
+  const Showcase({super.key, required this.width});
 
   @override
   State<Showcase> createState() => _ShowcaseState();
@@ -36,7 +37,7 @@ class _ShowcaseState extends State<Showcase> {
       return Padding(
           padding: const EdgeInsets.only(bottom: 30.0),
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.3,
+            width: widget.width,
             height: 300,
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(13)),

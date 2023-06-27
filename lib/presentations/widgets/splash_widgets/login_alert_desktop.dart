@@ -5,19 +5,19 @@ import 'package:provider/provider.dart';
  import 'package:portal/data/models/login_provider_result_model.dart';
 import 'package:portal/presentations/state_management/auth_provider.dart';
  
-class LogInAlert extends StatefulWidget {
+class LogInAlertDesktop extends StatefulWidget {
   final Function(LoginProviderResultModel? providerResult) switchBody;
 
-  const LogInAlert({
+  const LogInAlertDesktop({
     super.key,
     required this.switchBody,
   });
 
   @override
-  State<LogInAlert> createState() => _LogInAlertState();
+  State<LogInAlertDesktop> createState() => _LogInAlertDesktopState();
 }
 
-class _LogInAlertState extends State<LogInAlert> {
+class _LogInAlertDesktopState extends State<LogInAlertDesktop> {
   final formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();

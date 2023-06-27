@@ -3,12 +3,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:portal/commons/routing/router.gr.dart';
+import 'package:portal/commons/theme.dart';
 import 'package:portal/commons/utils.dart';
 
 import 'package:portal/data/models/user_model.dart';
 import 'package:portal/presentations/state_management/auth_provider.dart';
 import 'package:portal/presentations/state_management/document_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class EmployeeListItem extends StatefulWidget {
   final UserModel user;
@@ -31,47 +33,122 @@ class _EmployeeListItemState extends State<EmployeeListItem> {
   @override
   Widget build(BuildContext context) {
     return Consumer<DocumentListProvider>(builder: (context, doc, child) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.13,
-                child: Center(child: Text(widget.user.name))),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.13,
-                child: Center(child: Text(widget.user.surname))),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.13,
-                child: Center(child: Text(widget.user.mansione))),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.13,
+      return ResponsiveBuilder(builder: (context, size) {
+        return size.deviceScreenType == DeviceScreenType.mobile
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
-                    onTap: () async {
-                      await showUploadNameDocumentDialog();
-                    },
-                    child: const Center(child: Icon(Icons.add)))),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.13,
-                child: Center(
-                    child: GestureDetector(
-                        onTap: () {
-                          AutoRouter.of(context)
-                              .push(AllDocumentsRoute(userModel: widget.user));
-                        },
-                        child: const Icon(Icons.folder)))),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.13,
-                child: Center(
-                    child: GestureDetector(
-                        onTap: () async {
-                          await showEditEmployee(widget.user);
-                        },
-                        child: const Icon(Icons.edit))))
-          ],
-        ),
-      );
+                  onTap: () {
+                    AutoRouter.of(context)
+                        .push(AllDocumentsRoute(userModel: widget.user));
+                  },
+                  onLongPress: () async {
+                    await showEditEmployee(widget.user);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.24,
+                          child: Center(
+                              child: Text(widget.user.name,
+                                  style: DWTextTypography.of(context).text16))),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.24,
+                          child: Center(
+                              child: Text(
+                            widget.user.surname,
+                            style: DWTextTypography.of(context).text16,
+                          ))),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.24,
+                          child: Center(
+                              child: Text(widget.user.mansione,
+                                  style: DWTextTypography.of(context).text16))),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.24,
+                          child: GestureDetector(
+                              onTap: () async {
+                                await showUploadNameDocumentDialog();
+                              },
+                              child: const Center(
+                                  child:
+                                      Icon(Icons.add, color: Colors.white)))),
+                      //       SizedBox(
+                      //           width: MediaQuery.of(context).size.width * 0.13,
+                      //           child: Center(
+                      //               child: GestureDetector(
+                      //                   onTap: () {
+                      //                     AutoRouter.of(context).push(AllDocumentsRoute(
+                      //                         userModel: widget.user));
+                      //                   },
+                      //                   child: const Icon(Icons.folder)))),
+                      //       SizedBox(
+                      //           width: MediaQuery.of(context).size.width * 0.13,
+                      //           child: Center(
+                      //               child: GestureDetector(
+                      //                   onTap: () async {
+                      //                     await showEditEmployee(widget.user);
+                      //                   },
+                      //                   child: const Icon(Icons.edit))))
+                    ],
+                  ),
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        child: Center(
+                            child: Text(widget.user.name,
+                                style: DWTextTypography.of(context).text16))),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        child: Center(
+                            child: Text(widget.user.surname,
+                                style: DWTextTypography.of(context).text16))),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        child: Center(
+                            child: Text(widget.user.mansione,
+                                style: DWTextTypography.of(context).text16))),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        child: GestureDetector(
+                            onTap: () async {
+                              await showUploadNameDocumentDialog();
+                            },
+                            child: const Center(
+                                child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            )))),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        child: Center(
+                            child: GestureDetector(
+                                onTap: () {
+                                  AutoRouter.of(context).push(AllDocumentsRoute(
+                                      userModel: widget.user));
+                                },
+                                child: const Icon(Icons.folder,
+                                    color: Colors.white)))),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.13,
+                        child: Center(
+                            child: GestureDetector(
+                                onTap: () async {
+                                  await showEditEmployee(widget.user);
+                                },
+                                child: const Icon(Icons.edit,
+                                    color: Colors.white))))
+                  ],
+                ),
+              );
+      });
     });
   }
 

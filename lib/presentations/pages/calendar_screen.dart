@@ -13,6 +13,7 @@ import 'package:portal/presentations/state_management/new_appointment_provider.d
 import 'package:portal/presentations/state_management/user_provider.dart';
 import 'package:portal/presentations/widgets/calendar_widget/date_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -144,86 +145,91 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<AuthProvider>(context).currentUser;
-    return Consumer2<AppointmentListProvider, UserListProvider>(
-        builder: (context, list, users, child) {
-      return list.appointmentListByMe == null
-          ? SizedBox(
-              width: MediaQuery.of(context).size.width - 60,
-              height: MediaQuery.of(context).size.height,
-              child: Center(
-                  child: LoadingAnimationWidget.beat(
-                color: const Color.fromARGB(255, 255, 177, 59),
-                size: 60,
-              )),
-            )
-          : SizedBox(
-              width: MediaQuery.of(context).size.width - 60,
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                children: [
-                  Visibility(
-                    visible: user.isAdmin,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      color: const Color.fromARGB(255, 214, 214, 214),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTapDown: _storePosition,
-                              onLongPress: () async =>
-                                  await _showSelectUserToViewPopupMenu(
-                                      context, users.userList!),
-                              child: Container(
-                                width: 200,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                      color: Colors.black, width: 0.2),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 10.0, top: 10),
-                                  child: Text(
-                                    selectedUserName.isEmpty
-                                        ? '${user.name} ${user.surname}'
-                                        : selectedUserName,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
+    return ResponsiveBuilder(builder: (context, size) {
+      return Consumer2<AppointmentListProvider, UserListProvider>(
+          builder: (context, list, users, child) {
+        return list.appointmentListByMe == null
+            ? SizedBox(
+                width: MediaQuery.of(context).size.width - 60,
+                height: MediaQuery.of(context).size.height,
+                child: Center(
+                    child: LoadingAnimationWidget.beat(
+                  color: const Color.fromARGB(255, 255, 177, 59),
+                  size: 60,
+                )),
+              )
+            : SizedBox(
+                width: size.deviceScreenType == DeviceScreenType.mobile
+                    ? MediaQuery.of(context).size.width
+                    : MediaQuery.of(context).size.width - 60,
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  children: [
+                    Visibility(
+                      visible: user.isAdmin,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: const Color.fromARGB(255, 214, 214, 214),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GestureDetector(
+                                onTapDown: _storePosition,
+                                onLongPress: () async =>
+                                    await _showSelectUserToViewPopupMenu(
+                                        context, users.userList!),
+                                child: Container(
+                                  width: 200,
+                                  height: 35,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    border: Border.all(
+                                        color: Colors.black, width: 0.2),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10.0, top: 10),
+                                    child: Text(
+                                      selectedUserName.isEmpty
+                                          ? '${user.name} ${user.surname}'
+                                          : selectedUserName,
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          )
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: user.isAdmin
-                        ? MediaQuery.of(context).size.height - 51
-                        : MediaQuery.of(context).size.height,
-                    child: SfCalendar(
-                      view: CalendarView.workWeek,
-                      onTap: (calendarTapDetails) async {
-                        if (calendarTapDetails.appointments != null) {
-                          showEditDialog(calendarTapDetails, users.userList!);
-                        } else {
-                          showCreateDialog(calendarTapDetails, users.userList!);
-                        }
-                      },
-                      dataSource:
-                          MeetingDataSource(list.appointmentListByMe ?? []),
+                    SizedBox(
+                      height: user.isAdmin
+                          ? MediaQuery.of(context).size.height - 51
+                          : MediaQuery.of(context).size.height,
+                      child: SfCalendar(
+                        view: CalendarView.workWeek,
+                        onTap: (calendarTapDetails) async {
+                          if (calendarTapDetails.appointments != null) {
+                            showEditDialog(calendarTapDetails, users.userList!);
+                          } else {
+                            showCreateDialog(
+                                calendarTapDetails, users.userList!);
+                          }
+                        },
+                        dataSource:
+                            MeetingDataSource(list.appointmentListByMe ?? []),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                  ],
+                ),
+              );
+      });
     });
   }
 
