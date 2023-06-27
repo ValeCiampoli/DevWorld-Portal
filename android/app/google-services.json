@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "224739380277",
+    "project_id": "devworld-portal",
+    "storage_bucket": "devworld-portal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224739380277:android:e83d1e2eb1992dd131757c",
+        "android_client_info": {
+          "package_name": "com.example.portal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224739380277-tha87dv1qfei5skmtl4fed0tajk6tjrq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBohRuy69GLqLjGviUNrPtmdyljb0-f0bY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224739380277-tha87dv1qfei5skmtl4fed0tajk6tjrq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "224739380277-8uip608205hmdvqh62hhq7p9mbiavv2u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.portal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
