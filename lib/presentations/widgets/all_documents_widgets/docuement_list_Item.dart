@@ -4,7 +4,7 @@ import 'package:portal/data/models/document_model.dart';
 import 'package:portal/presentations/state_management/document_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 class DocumentItem extends StatelessWidget {
   final DocumentModel document;
@@ -31,12 +31,12 @@ class DocumentItem extends StatelessWidget {
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                  onTap: () {
-                    var doc = document.url;
-                    if (doc.isNotEmpty) {
-                      html.window.open(doc, "");
-                    }
-                  },
+                  // onTap: () {
+                  //   var doc = document.url;
+                  //   if (doc.isNotEmpty) {
+                  //     html.window.open(doc, "");
+                  //   }
+                  // },
                   child: const Text(
                     'Link',
                     style: TextStyle(
@@ -87,9 +87,9 @@ class DocumentItem extends StatelessWidget {
                       color: Colors.green,
                       onPressed: () async {
                         var doc = document.url;
-                        if (doc.isNotEmpty) {
-                          html.window.open(doc, "");
-                        }
+                        // if (doc.isNotEmpty) {
+                        //   html.window.open(doc, "");
+                        // }
                       },
                       child: const Icon(
                         Icons.download,

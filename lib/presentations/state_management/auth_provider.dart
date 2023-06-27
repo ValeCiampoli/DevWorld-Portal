@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print, avoid_web_libraries_in_flutter, unused_import
 
 import 'dart:async';
-import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
