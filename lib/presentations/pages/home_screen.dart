@@ -45,7 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return Consumer<MemoListProvider>(
             builder: (context, memoProvider, child) {
           return memoProvider.memoList == null
-              ? SizedBox(
+              ? Container(
+                color: Colors.black,
                   width: size.deviceScreenType == DeviceScreenType.mobile
                       ? MediaQuery.of(context).size.width
                       : MediaQuery.of(context).size.width - 60,
@@ -61,37 +62,45 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Colors.black,
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 30.0, bottom: 10),
-                            child: Text(
-                              'Appuntamenti',
-                              style: DWTextTypography.of(context).text18bold.copyWith(fontWeight: FontWeight.w600),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 30.0, bottom: 10),
+                              child: Text(
+                                'Appuntamenti',
+                                style: DWTextTypography.of(context).text18bold.copyWith(fontWeight: FontWeight.w600),
+                              ),
                             ),
-                          ),
-                          Showcase(
-                            width: MediaQuery.of(context).size.width,
-                          ),
-                          SizedBox(
-                            height: 220,
-                            width: MediaQuery.of(context).size.width,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: memoProvider.memoList!.length,
-                              itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Memo(memo: memoProvider.memoList![index]),
-                              );
-                            },),
-                          )
-                        ],
+                            Showcase(
+                              width: MediaQuery.of(context).size.width,
+                            ),
+                             Text(
+                                'Memo',
+                                style: DWTextTypography.of(context).text18bold.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                            SizedBox(
+                              height: 220,
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: memoProvider.memoList!.length,
+                                itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Memo(memo: memoProvider.memoList![index]),
+                                );
+                              },),
+                            )
+                          ],
+                        ),
                       ),
                     )
-                  : SizedBox(
+                  : Container(
+                    color: Colors.black,
                       width: MediaQuery.of(context).size.width - 50,
                       height: MediaQuery.of(context).size.height,
                       child: Padding(
@@ -100,15 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Padding(
+                               Padding(
                                 padding: EdgeInsets.all(20.0),
                                 child: Row(
                                   children: [
                                     Text(
                                       'Bacheca',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 22),
+                                      style: DWTextTypography.of(context).text22bold,
                                     )
                                   ],
                                 ),
@@ -118,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: const BoxDecoration(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(13)),
-                                    color: Color.fromARGB(255, 234, 234, 234),
+                                    color: Color.fromARGB(255, 77, 77, 77),
                                   ),
                                   width: MediaQuery.of(context).size.width - 60,
                                   height: 500,
@@ -177,15 +184,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 )
                               ]),
-                              const Padding(
+                               Padding(
                                 padding: EdgeInsets.all(20.0),
                                 child: Row(
                                   children: [
                                     Text(
                                       'Comunicazioni',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 22),
+                                        style: DWTextTypography.of(context).text22bold,
                                     )
                                   ],
                                 ),

@@ -17,14 +17,14 @@ class AppDatePickers {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: const ColorScheme.light(
-              onPrimary: Colors.yellow, // selected text color
+              onPrimary: Colors.white, // selected text color
               onSurface: Colors.black, // default text color
               primary: Colors.black, // circle color
             ),
             dialogBackgroundColor: Colors.white,
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                foregroundColor: Colors.yellow,
+                foregroundColor: Colors.white,
                 textStyle: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.normal,

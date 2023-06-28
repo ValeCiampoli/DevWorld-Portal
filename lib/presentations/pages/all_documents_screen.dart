@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:portal/commons/routing/router.gr.dart';
+import 'package:portal/commons/theme.dart';
 import 'package:portal/commons/utils.dart';
 import 'package:portal/data/models/document_model.dart';
 import 'package:portal/data/models/user_model.dart';
@@ -12,6 +13,7 @@ import 'package:portal/presentations/state_management/auth_provider.dart';
 import 'package:portal/presentations/state_management/document_provider.dart';
 import 'package:portal/presentations/widgets/all_documents_widgets/docuement_list_Item.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class AllDocumentsScreen extends StatefulWidget {
   const AllDocumentsScreen({super.key, this.userModel});
@@ -65,530 +67,867 @@ class _AllDocumentsScreenState extends State<AllDocumentsScreen> {
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<AuthProvider>(context).currentUser;
-    return Material(
-      child:
-          Consumer<DocumentListProvider>(builder: (context, document, child) {
-        return document.documentListById == null
-            ? SizedBox(
-              width: MediaQuery.of(context).size.width -60,
-              height: MediaQuery.of(context).size.height -70,
-              child: Center(
-                  child: LoadingAnimationWidget.beat(
-                  color: const Color.fromARGB(255, 255, 177, 59),
-                  size: 60,
-                )),
-            )
-            : SizedBox(
-              width: MediaQuery.of(context).size.width -60,
-                child: document.documentListById!.isEmpty
-                    ? Material(
-                        child: Column(
-                          children: [
-                                 Container(
-                              color: const Color.fromARGB(255, 235, 235, 235),
-                              height: 70,
-                              child: Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      await context
-                                          .read<DocumentListProvider>()
-                                          .cleanListProvider();
-
-                                      // AutoRouter.of(context).pop();
-                                      AutoRouter.of(context)
-                                          .replace(MainRoute());
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Image.asset(
-                                        'lib/resources/images/devworld.png',
-                                        width: 200,
+    return ResponsiveBuilder(builder: (context, size) {
+      return Material(
+        child:
+            Consumer<DocumentListProvider>(builder: (context, document, child) {
+          return document.documentListById == null
+              ? Container(
+                color: Colors.black,
+                  width: size.deviceScreenType == DeviceScreenType.mobile
+                      ? MediaQuery.of(context).size.width
+                      : MediaQuery.of(context).size.width - 60,
+                  height: MediaQuery.of(context).size.height - 70,
+                  child: Center(
+                      child: LoadingAnimationWidget.beat(
+                    color: const Color.fromARGB(255, 255, 177, 59),
+                    size: 60,
+                  )),
+                )
+              : SizedBox(
+                  width: size.deviceScreenType == DeviceScreenType.mobile
+                      ? MediaQuery.of(context).size.width
+                      : MediaQuery.of(context).size.width - 60,
+                  child: document.documentListById!.isEmpty
+                      ? Material(
+                          child: Column(
+                            children: [
+                              Container(
+                                color: const Color.fromARGB(255, 0, 0, 0),
+                                child: Padding(
+                                  padding: size.deviceScreenType !=
+                                              DeviceScreenType.mobile ||
+                                          size.deviceScreenType ==
+                                              DeviceScreenType.tablet
+                                      ? const EdgeInsets.all(0)
+                                      : const EdgeInsets.only(top: 50.0),
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          await context
+                                              .read<DocumentListProvider>()
+                                              .cleanListProvider();
+                                          // AutoRouter.of(context).pop();
+                                          AutoRouter.of(context)
+                                              .replace(const MainRoute());
+                                        },
+                                        child: size.deviceScreenType ==
+                                                DeviceScreenType.mobile
+                                            ? const SizedBox.shrink()
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8.0),
+                                                child: Image.asset(
+                                                  'lib/resources/images/LogoDefinitivoBianco.png',
+                                                  width: 200,
+                                                ),
+                                              ),
                                       ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      '${widget.userModel?.name ?? user.name} ${widget.userModel?.surname ?? user.surname}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                  ),
-                                  Expanded(child: Container()),
-                                  GestureDetector(
-                                    onTap: () async {
-                                      await showUploadNameDialog(
-                                          user, widget.userModel?.uid);
-                                    },
-                                    child: Container(
-                                      height: 35,
-                                      width: 130,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(8)),
-                                          border:
-                                              Border.all(color: Colors.blue)),
-                                      child: const Center(
-                                        child: Text(
-                                          'Carica Documento',
-                                          style: TextStyle(color: Colors.blue),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: 190,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey, width: 0.3),
-                                          color: Colors.white,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: DropdownSearch<String>(
-                                          items: year,
-                                          dropdownDecoratorProps:
-                                              const DropDownDecoratorProps(
-                                            dropdownSearchDecoration:
-                                                InputDecoration(
-                                              hintText: 'Filtra per anno',
-                                              border: InputBorder.none,
+                                      size.deviceScreenType ==
+                                              DeviceScreenType.mobile
+                                          ? const SizedBox()
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                '${widget.userModel?.name ?? user.name} ${widget.userModel?.surname ?? user.surname}',
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16),
+                                              ),
+                                            ),
+                                      Expanded(child: Container()),
+                                      size.deviceScreenType ==
+                                              DeviceScreenType.mobile
+                                          ? GestureDetector(
+                                              onTap: () async {
+                                                await showUploadNameDialog(user,
+                                                    widget.userModel?.uid);
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(8)),
+                                                    border: Border.all(
+                                                        color: Colors.blue)),
+                                                child: const Center(
+                                                    child: Padding(
+                                                  padding: EdgeInsets.all(5.0),
+                                                  child: Icon(Icons.add),
+                                                )),
+                                              ),
+                                            )
+                                          : GestureDetector(
+                                              onTap: () async {
+                                                await showUploadNameDialog(user,
+                                                    widget.userModel?.uid);
+                                              },
+                                              child: Container(
+                                                height: 35,
+                                                width: 130,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(8)),
+                                                    border: Border.all(
+                                                        color: Colors.blue)),
+                                                child: const Center(
+                                                  child: Text(
+                                                    'Carica Documento',
+                                                    style: TextStyle(
+                                                        color: Colors.blue),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                      size.deviceScreenType ==
+                                              DeviceScreenType.mobile
+                                          ? const SizedBox.shrink()
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                width: 190,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 0.3),
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                10))),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0),
+                                                  child: DropdownSearch<String>(
+                                                    items: month,
+                                                    dropdownDecoratorProps:
+                                                        const DropDownDecoratorProps(
+                                                      dropdownSearchDecoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            'Filtra per mese',
+                                                        border:
+                                                            InputBorder.none,
+                                                      ),
+                                                    ),
+                                                    onChanged: (value) {
+                                                      selectedMonthValue =
+                                                          value;
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                      size.deviceScreenType ==
+                                              DeviceScreenType.mobile
+                                          ? const SizedBox.shrink()
+                                          : Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
+                                              child: Container(
+                                                width: 190,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 0.3),
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                10))),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0),
+                                                  child: DropdownSearch<String>(
+                                                    items: year,
+                                                    dropdownDecoratorProps:
+                                                        const DropDownDecoratorProps(
+                                                      dropdownSearchDecoration:
+                                                          InputDecoration(
+                                                        hintText:
+                                                            'Filtra per anno',
+                                                        border:
+                                                            InputBorder.none,
+                                                      ),
+                                                    ),
+                                                    onChanged: (value) {
+                                                      selectedYearValue = value;
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                      Padding(
+                                        padding: size.deviceScreenType ==
+                                                DeviceScreenType.mobile
+                                            ? const EdgeInsets.only(left: 8.0)
+                                            : const EdgeInsets.only(right: 8.0),
+                                        child: Container(
+                                          width: size.deviceScreenType ==
+                                                  DeviceScreenType.mobile
+                                              ? 150
+                                              : 190,
+                                          height: 40,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.grey,
+                                                  width: 0.3),
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(10))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0),
+                                            child: DropdownSearch<String>(
+                                              items: docType,
+                                              dropdownDecoratorProps:
+                                                  const DropDownDecoratorProps(
+                                                dropdownSearchDecoration:
+                                                    InputDecoration(
+                                                  hintText: 'Filtra Doc',
+                                                  border: InputBorder.none,
+                                                ),
+                                              ),
+                                              onChanged: (value) {
+                                                selectedTypeValue = value;
+                                              },
                                             ),
                                           ),
-                                          onChanged: (value) {
-                                            selectedMonthValue = value;
-                                          },
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Container(
-                                      width: 190,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey, width: 0.3),
-                                          color: Colors.white,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: DropdownSearch<String>(
-                                          items: month,
-                                          dropdownDecoratorProps:
-                                              const DropDownDecoratorProps(
-                                            dropdownSearchDecoration:
-                                                InputDecoration(
-                                              hintText: 'Filtra per mese',
-                                              border: InputBorder.none,
-                                            ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            await context
+                                                .read<DocumentListProvider>()
+                                                .filterDocument(
+                                                  id: widget.userModel?.uid ??
+                                                      user.uid,
+                                                  type: selectedTypeValue,
+                                                  month: selectedMonthValue,
+                                                  year: selectedYearValue,
+                                                ); //selectedRoleValue);
+                                          },
+                                          child: Container(
+                                            width: 100,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 0.3),
+                                                color: Colors.blue,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(10))),
+                                            child: const Center(
+                                                child: Text(
+                                              'Filtra',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            )),
                                           ),
-                                          onChanged: (value) {
-                                            selectedMonthValue = value;
-                                          },
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Container(
-                                      width: 190,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey, width: 0.3),
-                                          color: Colors.white,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Padding(
+                                      Padding(
                                         padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: DropdownSearch<String>(
-                                          items: docType,
-                                          dropdownDecoratorProps:
-                                              const DropDownDecoratorProps(
-                                            dropdownSearchDecoration:
-                                                InputDecoration(
-                                              hintText:
-                                                  'Filtra per Tipologia Doc',
-                                              border: InputBorder.none,
-                                            ),
-                                          ),
-                                          onChanged: (value) {
-                                            selectedTypeValue = value;
+                                            const EdgeInsets.only(right: 8.0),
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            context
+                                                .read<DocumentListProvider>()
+                                                .filterDocument();
                                           },
+                                          child: Container(
+                                            width: 100,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.blue,
+                                                    width: 1),
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(10))),
+                                            child: const Center(
+                                                child: Text(
+                                              'Azzera filtri',
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            )),
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                      )
+                                    ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        await context
-                                            .read<DocumentListProvider>()
-                                            .filterDocument(
-                                              id: widget.userModel?.uid ??
-                                                  user.uid,
-                                              type: selectedTypeValue,
-                                              month: selectedMonthValue,
-                                              year: selectedYearValue,
-                                            ); //selectedRoleValue);
-                                      },
-                                      child: Container(
-                                        width: 100,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.grey, width: 0.3),
-                                            color: Colors.blue,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(10))),
-                                        child: const Center(
-                                            child: Text(
-                                          'Filtra',
-                                          style: TextStyle(color: Colors.white),
-                                        )),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        context
-                                            .read<DocumentListProvider>()
-                                            .filterDocument();
-                                      },
-                                      child: Container(
-                                        width: 100,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.blue, width: 1),
-                                            color: Colors.white,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(10))),
-                                        child: const Center(
-                                            child: Text(
-                                          'Azzera filtri',
-                                          style: TextStyle(color: Colors.blue),
-                                        )),
-                                      ),
-                                    ),
-                                  )
-                                ],
+                                ),
                               ),
-                            ),
-                       
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 60,
-                              height: MediaQuery.of(context).size.height - 70,
-                              child: const Center(
-                                  child: Text(
-                                      'Non sono stati ancora caricati documenti')),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Column(
-                        children: [
-                          Container(
-                            color: const Color.fromARGB(255, 235, 235, 235),
-                            height: 70,
-                            child: Row(
+                              Container(
+                                color: Colors.black,
+                                width: size.deviceScreenType ==
+                                        DeviceScreenType.mobile
+                                    ? MediaQuery.of(context).size.width
+                                    : MediaQuery.of(context).size.width,
+                                height:
+                                size.deviceScreenType !=
+                                        DeviceScreenType.mobile
+                                    ?MediaQuery.of(context).size.height:
+                                    MediaQuery.of(context).size.height - 106,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Non sono stati ancora caricati documenti',
+                                      style:
+                                          DWTextTypography.of(context).text18,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          AutoRouter.of(context).pop();
+                                        },
+                                        child: Container(
+                                          height: 45,
+                                          width: MediaQuery.of(context).size.width * 0.7,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(8),
+                                            color: Colors.blue),
+                                          child: Center(
+                                            child: Text(
+                                              'Torna alla pagina precedente',
+                                              style:
+                                                  DWTextTypography.of(context).text18bold.copyWith(fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 150,)
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          child: Container(
+                            color: const Color.fromARGB(255, 9, 9, 9),
+                            child: Column(
                               children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    await context
-                                        .read<DocumentListProvider>()
-                                        .cleanListProvider();
-                                    // AutoRouter.of(context).pop();
-                                    AutoRouter.of(context).replace(MainRoute());
-                                  },
+                                Container(
+                                  color: const Color.fromARGB(255, 0, 0, 0),
                                   child: Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Image.asset(
-                                      'lib/resources/images/devworld.png',
-                                      width: 200,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    '${widget.userModel?.name ?? user.name} ${widget.userModel?.surname ?? user.surname}',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                ),
-                                Expanded(child: Container()),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await showUploadNameDialog(
-                                        user, widget.userModel?.uid);
-                                  },
-                                  child: Container(
-                                    height: 35,
-                                    width: 130,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(8)),
-                                        border: Border.all(color: Colors.blue)),
-                                    child: const Center(
-                                      child: Text(
-                                        'Carica Documento',
-                                        style: TextStyle(color: Colors.blue),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: 190,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.grey, width: 0.3),
-                                        color: Colors.white,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: DropdownSearch<String>(
-                                        items: month,
-                                        dropdownDecoratorProps:
-                                            const DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            hintText: 'Filtra per mese',
-                                            border: InputBorder.none,
+                                    padding: size.deviceScreenType !=
+                                                DeviceScreenType.mobile ||
+                                            size.deviceScreenType ==
+                                                DeviceScreenType.tablet
+                                        ? const EdgeInsets.all(0)
+                                        : const EdgeInsets.only(top: 50.0),
+                                    child: Row(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () async {
+                                            await context
+                                                .read<DocumentListProvider>()
+                                                .cleanListProvider();
+                                            // AutoRouter.of(context).pop();
+                                            AutoRouter.of(context)
+                                                .replace(const MainRoute());
+                                          },
+                                          child: size.deviceScreenType ==
+                                                  DeviceScreenType.mobile
+                                              ? const SizedBox.shrink()
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0),
+                                                  child: Image.asset(
+                                                    'lib/resources/images/LogoDefinitivoBianco.png',
+                                                    width: 200,
+                                                  ),
+                                                ),
+                                        ),
+                                        size.deviceScreenType ==
+                                                DeviceScreenType.mobile
+                                            ? const SizedBox()
+                                            : Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  '${widget.userModel?.name ?? user.name} ${widget.userModel?.surname ?? user.surname}',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                              ),
+                                        Expanded(child: Container()),
+                                        size.deviceScreenType ==
+                                                DeviceScreenType.mobile
+                                            ? GestureDetector(
+                                                onTap: () async {
+                                                  await showUploadNameDialog(
+                                                      user,
+                                                      widget.userModel?.uid);
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .all(
+                                                              Radius.circular(
+                                                                  8)),
+                                                      border: Border.all(
+                                                          color: Colors.blue)),
+                                                  child: const Center(
+                                                      child: Padding(
+                                                    padding:
+                                                        EdgeInsets.all(5.0),
+                                                    child: Icon(Icons.add),
+                                                  )),
+                                                ),
+                                              )
+                                            : GestureDetector(
+                                                onTap: () async {
+                                                  await showUploadNameDialog(
+                                                      user,
+                                                      widget.userModel?.uid);
+                                                },
+                                                child: Container(
+                                                  height: 35,
+                                                  width: 130,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .all(
+                                                              Radius.circular(
+                                                                  8)),
+                                                      border: Border.all(
+                                                          color: Colors.blue)),
+                                                  child: const Center(
+                                                    child: Text(
+                                                      'Carica Documento',
+                                                      style: TextStyle(
+                                                          color: Colors.blue),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                        size.deviceScreenType ==
+                                                DeviceScreenType.mobile
+                                            ? const SizedBox.shrink()
+                                            : Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  width: 190,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 0.3),
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .all(
+                                                              Radius.circular(
+                                                                  10))),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0),
+                                                    child:
+                                                        DropdownSearch<String>(
+                                                      items: month,
+                                                      dropdownDecoratorProps:
+                                                          const DropDownDecoratorProps(
+                                                        dropdownSearchDecoration:
+                                                            InputDecoration(
+                                                          hintText:
+                                                              'Filtra per mese',
+                                                          border:
+                                                              InputBorder.none,
+                                                        ),
+                                                      ),
+                                                      onChanged: (value) {
+                                                        selectedMonthValue =
+                                                            value;
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                        size.deviceScreenType ==
+                                                DeviceScreenType.mobile
+                                            ? const SizedBox.shrink()
+                                            : Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: Container(
+                                                  width: 190,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 0.3),
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .all(
+                                                              Radius.circular(
+                                                                  10))),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 8.0),
+                                                    child:
+                                                        DropdownSearch<String>(
+                                                      items: year,
+                                                      dropdownDecoratorProps:
+                                                          const DropDownDecoratorProps(
+                                                        dropdownSearchDecoration:
+                                                            InputDecoration(
+                                                          hintText:
+                                                              'Filtra per anno',
+                                                          border:
+                                                              InputBorder.none,
+                                                        ),
+                                                      ),
+                                                      onChanged: (value) {
+                                                        selectedYearValue =
+                                                            value;
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                        Padding(
+                                          padding: size.deviceScreenType ==
+                                                  DeviceScreenType.mobile
+                                              ? const EdgeInsets.only(left: 8.0)
+                                              : const EdgeInsets.only(
+                                                  right: 8.0),
+                                          child: Container(
+                                            width: size.deviceScreenType ==
+                                                    DeviceScreenType.mobile
+                                                ? 150
+                                                : 190,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 0.3),
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(10))),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0),
+                                              child: DropdownSearch<String>(
+                                                items: docType,
+                                                dropdownDecoratorProps:
+                                                    const DropDownDecoratorProps(
+                                                  dropdownSearchDecoration:
+                                                      InputDecoration(
+                                                    hintText: 'Filtra Doc',
+                                                    border: InputBorder.none,
+                                                  ),
+                                                ),
+                                                onChanged: (value) {
+                                                  selectedTypeValue = value;
+                                                },
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                        onChanged: (value) {
-                                          selectedMonthValue = value;
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Container(
-                                    width: 190,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.grey, width: 0.3),
-                                        color: Colors.white,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: DropdownSearch<String>(
-                                        items: year,
-                                        dropdownDecoratorProps:
-                                            const DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            hintText: 'Filtra per anno',
-                                            border: InputBorder.none,
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              await context
+                                                  .read<DocumentListProvider>()
+                                                  .filterDocument(
+                                                    id: widget.userModel?.uid ??
+                                                        user.uid,
+                                                    type: selectedTypeValue,
+                                                    month: selectedMonthValue,
+                                                    year: selectedYearValue,
+                                                  ); //selectedRoleValue);
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: 0.3),
+                                                  color: Colors.blue,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(10))),
+                                              child: const Center(
+                                                  child: Text(
+                                                'Filtra',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )),
+                                            ),
                                           ),
                                         ),
-                                        onChanged: (value) {
-                                          selectedYearValue = value;
-                                        },
-                                      ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 8.0),
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              context
+                                                  .read<DocumentListProvider>()
+                                                  .filterDocument();
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: Colors.blue,
+                                                      width: 1),
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(10))),
+                                              child: const Center(
+                                                  child: Text(
+                                                'Azzera filtri',
+                                                style: TextStyle(
+                                                    color: Colors.blue),
+                                              )),
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: Container(
-                                    width: 190,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.grey, width: 0.3),
-                                        color: Colors.white,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(10))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: DropdownSearch<String>(
-                                        items: docType,
-                                        dropdownDecoratorProps:
-                                            const DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            hintText:
-                                                'Filtra per Tipologia Doc',
-                                            border: InputBorder.none,
+                                size.deviceScreenType == DeviceScreenType.mobile
+                                    ? SizedBox(
+                                        height: 50,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Visibility(
+                                                visible: user.isAdmin,
+                                                child: SizedBox(
+                                                  child: GestureDetector(
+                                                      onTap: () async {
+                                                        await document
+                                                            .cleanListProvider();
+                                                        if (mounted) {
+                                                          AutoRouter.of(context)
+                                                              .pop();
+                                                        }
+                                                      },
+                                                      child: const Icon(
+                                                        Icons.arrow_back,
+                                                        color: Colors.white,
+                                                      )),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.22,
+                                                  child: Text(
+                                                    'Data',
+                                                    style: DWTextTypography.of(
+                                                            context)
+                                                        .text18bold
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  )),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.22,
+                                                  child: Text(
+                                                    'Nome',
+                                                    style: DWTextTypography.of(
+                                                            context)
+                                                        .text18bold
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  )),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.22,
+                                                  child: Text(
+                                                    'Scarica',
+                                                    style: DWTextTypography.of(
+                                                            context)
+                                                        .text18bold
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  )),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.22,
+                                                  child: Text(
+                                                    'Azioni',
+                                                    style: DWTextTypography.of(
+                                                            context)
+                                                        .text18bold
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  )),
+                                            ],
                                           ),
                                         ),
-                                        onChanged: (value) {
-                                          selectedTypeValue = value;
-                                        },
+                                      )
+                                    : SizedBox(
+                                        height: 50,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Visibility(
+                                                visible: user.isAdmin,
+                                                child: SizedBox(
+                                                  child: GestureDetector(
+                                                      onTap: () async {
+                                                        await document
+                                                            .cleanListProvider();
+                                                        if (mounted) {
+                                                          AutoRouter.of(context)
+                                                              .pop();
+                                                        }
+                                                      },
+                                                      child: const Icon(
+                                                        Icons.arrow_back,
+                                                        color: Colors.white,
+                                                      )),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.22,
+                                                  child: Text(
+                                                    'Data Documento',
+                                                    style: DWTextTypography.of(
+                                                            context)
+                                                        .text18bold
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  )),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.22,
+                                                  child: Text(
+                                                    'Nome Documento',
+                                                    style: DWTextTypography.of(
+                                                            context)
+                                                        .text18bold
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  )),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.22,
+                                                  child: Text(
+                                                    'Link',
+                                                    style: DWTextTypography.of(
+                                                            context)
+                                                        .text18bold
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  )),
+                                              SizedBox(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.22,
+                                                  child: Text(
+                                                    'Azioni',
+                                                    style: DWTextTypography.of(
+                                                            context)
+                                                        .text18bold
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      await context
-                                          .read<DocumentListProvider>()
-                                          .filterDocument(
-                                            id: widget.userModel?.uid ??
-                                                user.uid,
-                                            type: selectedTypeValue,
-                                            month: selectedMonthValue,
-                                            year: selectedYearValue,
-                                          ); //selectedRoleValue);
-                                    },
-                                    child: Container(
-                                      width: 100,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.grey, width: 0.3),
-                                          color: Colors.blue,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: const Center(
-                                          child: Text(
-                                        'Filtra',
-                                        style: TextStyle(color: Colors.white),
-                                      )),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      context
-                                          .read<DocumentListProvider>()
-                                          .filterDocument();
-                                    },
-                                    child: Container(
-                                      width: 100,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Colors.blue, width: 1),
-                                          color: Colors.white,
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: const Center(
-                                          child: Text(
-                                        'Azzera filtri',
-                                        style: TextStyle(color: Colors.blue),
-                                      )),
-                                    ),
-                                  ),
+                                Container(
+                                  color: Colors.black,
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height,
+                                  child: ListView.separated(
+                                      itemBuilder: (context, index) {
+                                        return DocumentItem(
+                                          document:
+                                              document.documentListById![index],
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) {
+                                        return const Divider();
+                                      },
+                                      itemCount:
+                                          document.documentListById!.length),
                                 )
                               ],
                             ),
                           ),
-                          SizedBox(
-                            height: 50,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Visibility(
-                                    visible: user.isAdmin,
-                                    child: SizedBox(
-                                      child: GestureDetector(
-                                          onTap: () async {
-                                            await document.cleanListProvider();
-                                            if (mounted) {
-                                              AutoRouter.of(context).pop();
-                                            }
-                                          },
-                                          child: const Icon(Icons.arrow_back)),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.22,
-                                      child: const Text(
-                                        'Data Documento',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      )),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.22,
-                                      child: const Text(
-                                        'Nome Documento',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      )),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.22,
-                                      child: const Text(
-                                        'Link',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      )),
-                                  SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.22,
-                                      child: const Text(
-                                        'Azioni',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16),
-                                      )),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height - 120,
-                            child: ListView.separated(
-                                itemBuilder: (context, index) {
-                                  return DocumentItem(
-                                    document: document.documentListById![index],
-                                  );
-                                },
-                                separatorBuilder: (context, index) {
-                                  return const Divider();
-                                },
-                                itemCount: document.documentListById!.length),
-                          )
-                        ],
-                      ),
-              );
-      }),
-    );
+                        ),
+                );
+        }),
+      );
+    });
   }
 
   Future<void> showUploadNameDialog(UserModel user, String? id) async {

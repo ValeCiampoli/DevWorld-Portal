@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:portal/commons/theme.dart';
 import 'package:portal/presentations/pages/all_documents_screen.dart';
 import 'package:portal/presentations/pages/calendar_screen.dart';
 import 'package:portal/presentations/pages/employee_screen.dart';
@@ -46,7 +47,8 @@ class _MainScreenState extends State<MainScreen> {
                           child: Container(
                             color: Colors.black,
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.only(
+                                  left: 5, top: 50.0, bottom: 10),
                               child: Row(children: [
                                 Image.asset(
                                   "lib/resources/images/LogoDefinitivoBianco.png",
@@ -59,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
                       : const PreferredSize(
                           preferredSize: Size.fromHeight(0), child: SizedBox()),
                   body: SingleChildScrollView(
+                    physics: NeverScrollableScrollPhysics(),
                     child: Column(children: [
                       Row(
                         children: [
@@ -67,8 +70,7 @@ class _MainScreenState extends State<MainScreen> {
                               : Container(
                                   width: 50,
                                   height: MediaQuery.of(context).size.height,
-                                  color:
-                                      const Color.fromARGB(255, 209, 209, 209),
+                                  color: Color.fromARGB(255, 49, 49, 49),
                                   child: Column(
                                     children: [
                                       IconButton(
@@ -79,8 +81,8 @@ class _MainScreenState extends State<MainScreen> {
                                           },
                                           icon: const Icon(
                                             Icons.home,
-                                            color:
-                                                Color.fromARGB(255, 65, 65, 65),
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
                                           )),
                                       IconButton(
                                           onPressed: () {
@@ -91,8 +93,8 @@ class _MainScreenState extends State<MainScreen> {
                                           icon: const Icon(
                                             Icons.calendar_month,
                                             size: 25,
-                                            color:
-                                                Color.fromARGB(255, 65, 65, 65),
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
                                           )),
                                       IconButton(
                                           onPressed: () {
@@ -106,8 +108,8 @@ class _MainScreenState extends State<MainScreen> {
                                           },
                                           icon: const Icon(
                                             Icons.folder,
-                                            color:
-                                                Color.fromARGB(255, 65, 65, 65),
+                                            color: Color.fromARGB(
+                                                255, 255, 255, 255),
                                           )),
                                       Expanded(child: Container()),
                                       Padding(
@@ -132,39 +134,147 @@ class _MainScreenState extends State<MainScreen> {
                       )
                     ]),
                   ),
-                  bottomNavigationBar:
-                      size.deviceScreenType == DeviceScreenType.mobile
-                          ? BottomNavigationBar(
-                              currentIndex: selectedIndex,
-                              onTap: (value) {
-                                setState(() {
-                                  selectedIndex = value;
-                                });
-                              },
-                              type: BottomNavigationBarType.fixed, // Fixed
-                              backgroundColor:
-                                  Colors.black, // <-- This works for fixed
-                              selectedItemColor: Colors.blue,
-                              unselectedItemColor: Colors.grey,
-                              items: [
-                                  const BottomNavigationBarItem(
-                                      icon: Icon(Icons.home), label: 'Home'),
-                                  const BottomNavigationBarItem(
-                                      icon: Icon(Icons.calendar_month),
-                                      label: 'Calendario'),
-                                  const BottomNavigationBarItem(
-                                      icon: Icon(Icons.folder), label: 'File'),
-                                  BottomNavigationBarItem(
-                                      icon: GestureDetector(
-                                          onTap: () async {
-                                            await context
-                                                .read<AuthProvider>()
-                                                .signOut();
-                                          },
-                                          child: const Icon(Icons.home)),
-                                      label: 'Logout'),
-                                ])
-                          : const SizedBox.shrink()),
+                  bottomNavigationBar: size.deviceScreenType ==
+                          DeviceScreenType.mobile
+                      ? Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 33, vertical: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedIndex = 0;
+                                    });
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.home,
+                                        color: selectedIndex == 0
+                                            ? Colors.blue
+                                            : Colors.white,
+                                        size: 33,
+                                      ),
+                                      Text(
+                                        'Home',
+                                        style: DWTextTypography.of(context)
+                                            .text12
+                                            .copyWith(
+                                              color: selectedIndex == 0
+                                                  ? Colors.blue
+                                                  : Colors.white,
+                                            ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selectedIndex = 1;
+                                    });
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.calendar_month,
+                                        color: selectedIndex == 1
+                                            ? Colors.blue
+                                            : Colors.white,
+                                        size: 33,
+                                      ),
+                                      Text(
+                                        'Calendario',
+                                        style: DWTextTypography.of(context)
+                                            .text12
+                                            .copyWith(
+                                              color: selectedIndex == 1
+                                                  ? Colors.blue
+                                                  : Colors.white,
+                                            ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      if (user.isAdmin) {
+                                        selectedIndex = 2;
+                                      } else {
+                                        selectedIndex = 3;
+                                      }
+                                    });
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.folder,
+                                        color: selectedIndex == 2 ||
+                                                selectedIndex == 3
+                                            ? Colors.blue
+                                            : Colors.white,
+                                        size: 33,
+                                      ),
+                                      Text(
+                                        'File',
+                                        style: DWTextTypography.of(context)
+                                            .text12
+                                            .copyWith(
+                                              color: selectedIndex == 2 ||
+                                                      selectedIndex == 3
+                                                  ? Colors.blue
+                                                  : Colors.white,
+                                            ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await showLogoutDialog();
+                                  
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Icons.logout,
+                                        color: selectedIndex == 4
+                                            ? Colors.blue
+                                            : Colors.white,
+                                        size: 33,
+                                      ),
+                                      Text(
+                                        'Logout',
+                                        style: DWTextTypography.of(context)
+                                            .text12
+                                            .copyWith(
+                                              color: Colors.white,
+                                            ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ))
+                      : const SizedBox.shrink()),
             );
           }),
         );
@@ -177,6 +287,86 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  Future<void> showLogoutDialog() async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: Container(
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.white,
+                      Colors.white,
+                    ]),
+                borderRadius: BorderRadius.all(Radius.circular(4))),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: SizedBox(
+                    width: 400,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          'lib/resources/images/devworld.png',
+                          width: 140,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 20.0),
+                  child: SizedBox(width: 400, child: Divider()),
+                ),
+               
+                const Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 50.0),
+                  child: SizedBox(
+                      width: 200,
+                      child: Text(
+                        'Sei Sicuro di voler effettuare il logout?',
+                        textAlign: TextAlign.center,
+                      )),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: MaterialButton(
+                        onPressed: () async {
+                            await context
+                                              .read<AuthProvider>()
+                                              .signOut();
+                        },
+                        child: Container(
+                          width: 80,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.red
+                          ),
+                          child: Center(child: Text('Logout', style: DWTextTypography.of(context).text16,))),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  }
+
   PopupMenuItem<Options> _buildPopupMenuItem(String title, Options position) {
     return PopupMenuItem<Options>(
       value: position,
@@ -187,4 +377,4 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-}
+
