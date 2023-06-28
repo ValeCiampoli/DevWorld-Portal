@@ -77,7 +77,7 @@ class _EmployeeScreenState extends State<EmployeeScreen> {
                                     ),
                               Expanded(child: Container()),
                               Container(
-                                width: size.deviceScreenType == DeviceScreenType.mobile ? 180 : 240,
+                                width: size.deviceScreenType == DeviceScreenType.mobile ? 165 : 240,
                                 height: 40,
                                 decoration: BoxDecoration(
                                     border: Border.all(

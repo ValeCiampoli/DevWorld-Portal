@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context, memoProvider, child) {
           return memoProvider.memoList == null
               ? Container(
-                color: Colors.black,
+                  color: Colors.black,
                   width: size.deviceScreenType == DeviceScreenType.mobile
                       ? MediaQuery.of(context).size.width
                       : MediaQuery.of(context).size.width - 60,
@@ -58,49 +58,70 @@ class _HomeScreenState extends State<HomeScreen> {
                   )),
                 )
               : size.deviceScreenType == DeviceScreenType.mobile
-                  ? Container(
-                      color: Colors.black,
+                  ? SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 30.0, bottom: 10),
-                              child: Text(
-                                'Appuntamenti',
-                                style: DWTextTypography.of(context).text18bold.copyWith(fontWeight: FontWeight.w600),
-                              ),
+                      child: Scaffold(
+                        floatingActionButton: Padding(
+                          padding: const EdgeInsets.only(bottom: 170.0),
+                          child: FloatingActionButton(
+                              child: Icon(Icons.add),
+                              onPressed: () async {
+                                await showCreateMemo(user);
+                              }),
+                        ),
+                        body: Container(
+                          color: Colors.black,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 30.0, bottom: 10),
+                                  child: Text(
+                                    'Appuntamenti',
+                                    style: DWTextTypography.of(context)
+                                        .text18bold
+                                        .copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                Showcase(
+                                  width: MediaQuery.of(context).size.width,
+                                ),
+                                Text(
+                                  'Memo',
+                                  style: DWTextTypography.of(context)
+                                      .text18bold
+                                      .copyWith(fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  height: 220,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: memoProvider.memoList!.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Memo(
+                                            memo:
+                                                memoProvider.memoList![index]),
+                                      );
+                                    },
+                                  ),
+                                )
+                              ],
                             ),
-                            Showcase(
-                              width: MediaQuery.of(context).size.width,
-                            ),
-                             Text(
-                                'Memo',
-                                style: DWTextTypography.of(context).text18bold.copyWith(fontWeight: FontWeight.w600),
-                              ),
-                            SizedBox(
-                              height: 220,
-                              width: MediaQuery.of(context).size.width,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: memoProvider.memoList!.length,
-                                itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Memo(memo: memoProvider.memoList![index]),
-                                );
-                              },),
-                            )
-                          ],
+                          ),
                         ),
                       ),
                     )
                   : Container(
-                    color: Colors.black,
+                      color: Colors.black,
                       width: MediaQuery.of(context).size.width - 50,
                       height: MediaQuery.of(context).size.height,
                       child: Padding(
@@ -109,13 +130,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                               Padding(
+                              Padding(
                                 padding: EdgeInsets.all(20.0),
                                 child: Row(
                                   children: [
                                     Text(
                                       'Bacheca',
-                                      style: DWTextTypography.of(context).text22bold,
+                                      style: DWTextTypography.of(context)
+                                          .text22bold,
                                     )
                                   ],
                                 ),
@@ -184,13 +206,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 )
                               ]),
-                               Padding(
+                              Padding(
                                 padding: EdgeInsets.all(20.0),
                                 child: Row(
                                   children: [
                                     Text(
                                       'Comunicazioni',
-                                        style: DWTextTypography.of(context).text22bold,
+                                      style: DWTextTypography.of(context)
+                                          .text22bold,
                                     )
                                   ],
                                 ),

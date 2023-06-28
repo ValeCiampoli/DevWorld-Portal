@@ -49,24 +49,24 @@ class _EmployeeListItemState extends State<EmployeeListItem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.24,
+                          width: MediaQuery.of(context).size.width * 0.23,
                           child: Center(
                               child: Text(widget.user.name,
                                   style: DWTextTypography.of(context).text16))),
                       SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.24,
+                          width: MediaQuery.of(context).size.width * 0.23,
                           child: Center(
                               child: Text(
                             widget.user.surname,
                             style: DWTextTypography.of(context).text16,
                           ))),
                       SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.24,
+                          width: MediaQuery.of(context).size.width * 0.23,
                           child: Center(
                               child: Text(widget.user.mansione,
                                   style: DWTextTypography.of(context).text16))),
                       SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.24,
+                          width: MediaQuery.of(context).size.width * 0.23,
                           child: GestureDetector(
                               onTap: () async {
                                 await showUploadNameDocumentDialog();
@@ -74,23 +74,6 @@ class _EmployeeListItemState extends State<EmployeeListItem> {
                               child: const Center(
                                   child:
                                       Icon(Icons.add, color: Colors.white)))),
-                      //       SizedBox(
-                      //           width: MediaQuery.of(context).size.width * 0.13,
-                      //           child: Center(
-                      //               child: GestureDetector(
-                      //                   onTap: () {
-                      //                     AutoRouter.of(context).push(AllDocumentsRoute(
-                      //                         userModel: widget.user));
-                      //                   },
-                      //                   child: const Icon(Icons.folder)))),
-                      //       SizedBox(
-                      //           width: MediaQuery.of(context).size.width * 0.13,
-                      //           child: Center(
-                      //               child: GestureDetector(
-                      //                   onTap: () async {
-                      //                     await showEditEmployee(widget.user);
-                      //                   },
-                      //                   child: const Icon(Icons.edit))))
                     ],
                   ),
                 ),
