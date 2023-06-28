@@ -30,7 +30,6 @@ class AppDatePickers {
                   fontWeight: FontWeight.normal,
                   fontSize: 12,
                 ),
-                // color of button's letters
                 backgroundColor: Colors.black,
                 // Background color
                 shape: RoundedRectangleBorder(
