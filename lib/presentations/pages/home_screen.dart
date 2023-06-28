@@ -107,9 +107,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     itemBuilder: (context, index) {
                                       return Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Memo(
-                                            memo:
-                                                memoProvider.memoList![index]),
+                                        child: GestureDetector(
+                                          onLongPress: () async {
+                                            await deleteMemoDialog(
+                                                memoProvider.memoList![index]);
+                                          },
+                                          child: Memo(
+                                              memo: memoProvider
+                                                  .memoList![index]),
+                                        ),
                                       );
                                     },
                                   ),
@@ -234,6 +240,70 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
         });
       }),
+    );
+  }
+
+  Future<void> deleteMemoDialog(MemoModel memo) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          child: SizedBox(
+            width: 500,
+            height: 260,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    'lib/resources/images/devworld.png',
+                    width: 200,
+                  ),
+                ),
+                const Divider(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 50.0),
+                  child: Center(
+                    child: Text(
+                        'Sei sicuro di voler cancellare questo Memo?'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20.0, top: 25),
+                  child: GestureDetector(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          width: 150,
+                          height: 45,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(8)),
+                            child: Center(
+                              child: Text(
+                                'Cancella Memo',
+                                style: DWTextTypography.of(context).text18,
+                              ),
+                            )),
+                      ],
+                    ),
+                    onTap: () async {
+                      await context.read<MemoListProvider>().deleteMemo(memo);
+                      await context.read<MemoListProvider>().getAllMemo();
+                      if (mounted) {
+                        AutoRouter.of(context).pop();
+                      }
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
