@@ -6,7 +6,7 @@ import 'package:portal/presentations/state_management/document_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:html' as html;
+//import 'dart:html' as html;
 
 class DocumentItem extends StatefulWidget {
   final DocumentModel document;
@@ -53,7 +53,7 @@ class _DocumentItemState extends State<DocumentItem> {
                            onTap: () {
                             var doc = widget.document.url;
                             if (doc.isNotEmpty) {
-                             html.window.open(doc, "");
+                             //html.window.open(doc, "");
                             }
                           },
                           child: Text('Link',
@@ -106,7 +106,7 @@ class _DocumentItemState extends State<DocumentItem> {
                           onTap: () {
                             var doc = widget.document.url;
                             if (doc.isNotEmpty) {
-                              html.window.open(doc, "");
+                              //html.window.open(doc, "");
                             }
                           },
                           child: Text('Link',
@@ -158,7 +158,7 @@ class _DocumentItemState extends State<DocumentItem> {
                               onPressed: () async {
                                 var doc = widget.document.url;
                                 if (doc.isNotEmpty) {
-                                  html.window.open(doc, "");
+                                  //html.window.open(doc, "");
                                 }
                               },
                               child: const Icon(
