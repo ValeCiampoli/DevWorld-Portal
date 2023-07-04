@@ -74,6 +74,10 @@ class NewAppointmentProvider with ChangeNotifier {
     clearPostProvider();
   }
 
+//  Future<bool> checkSlotAppointment(List<String>? userIds,DateTime? startDate,DateTime? endDate,) async{
+
+//  }
+
   Future<bool> publishAppoitnemt(
       {DateTime? startDate,
       String? url,

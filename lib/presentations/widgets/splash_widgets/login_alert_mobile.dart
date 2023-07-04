@@ -37,8 +37,7 @@ class _LogInAlertMobileState extends State<LogInAlertMobile> {
           SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              child: Image.asset(
-                'lib/resources/images/divider-bg.jpg',
+              child: Image.asset('lib/resources/images/divider-bg.jpg',
                 fit: BoxFit.cover,
               )),
           Container(
@@ -63,28 +62,22 @@ class _LogInAlertMobileState extends State<LogInAlertMobile> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.25,
                 ),
-                Image.asset(
-                  "lib/resources/images/LogoDefinitivoBianco.png",
+                Image.asset("lib/resources/images/LogoDefinitivoBianco.png",
                   width: MediaQuery.of(context).size.width * 0.8,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30.0, bottom: 10),
-                  child: Text(
-                    'Sign In',
+                  child: Text('Sign In',
                     style: DWTextTypography.of(context).text22bold,
                   ),
                 ),
-                Text(
-                  'Benvenuto in DevWorld Portal',
+                Text('Benvenuto in DevWorld Portal',
                   style: DWTextTypography.of(context).text18,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20.0, bottom: 0),
-                  child: Text(
-                    'Email',
-                    style: DWTextTypography.of(context)
-                        .text18
-                        .copyWith(color: Colors.grey),
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Text(tr("enter_mail"),
+                    style: DWTextTypography.of(context).text18.copyWith(color: Colors.grey),
                   ),
                 ),
                 Padding(
@@ -109,18 +102,15 @@ class _LogInAlertMobileState extends State<LogInAlertMobile> {
                       focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
-                      hintText: 'Inserisci Mail',
+                      hintText: 'Inserisci mail',
                       hintStyle: DWTextTypography.of(context).text18,
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0, bottom: 0),
-                  child: Text(
-                    'Password',
-                    style: DWTextTypography.of(context)
-                        .text18
-                        .copyWith(color: Colors.grey),
+                  child: Text(tr("enter_password"),
+                    style: DWTextTypography.of(context).text18.copyWith(color: Colors.grey),
                   ),
                 ),
                 Padding(
@@ -136,7 +126,7 @@ class _LogInAlertMobileState extends State<LogInAlertMobile> {
                       focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
-                      hintText: 'Inserisci Password',
+                      hintText: 'Inserisci password',
                       hintStyle: DWTextTypography.of(context).text18,
                     ),
                     validator: (value) {
@@ -207,8 +197,7 @@ class _LogInAlertMobileState extends State<LogInAlertMobile> {
                                 minWidth: 100),
                             child: Center(
                               child: Text(tr("login"),
-                                  style:
-                                      DWTextTypography.of(context).text16bold),
+                                  style: DWTextTypography.of(context).text16bold),
                             ),
                           ),
                         ),
@@ -233,7 +222,7 @@ class _LogInAlertMobileState extends State<LogInAlertMobile> {
                             minHeight: 30,
                             minWidth: 100),
                         child: Center(
-                          child: Text("Iscriviti",
+                          child: Text("Registrati",
                               style: DWTextTypography.of(context).text16bold),
                         ),
                       ),
@@ -245,88 +234,6 @@ class _LogInAlertMobileState extends State<LogInAlertMobile> {
           )
         ],
       ),
-      //todo remove comment sots
-      // child: Column(
-      //   mainAxisSize: MainAxisSize.min,
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   crossAxisAlignment: CrossAxisAlignment.start,
-      //   children: [
-
-      //      Text(
-      //       tr("enter_password"),
-      //       style: const TextStyle(
-      //         color: Colors.white,
-      //         fontSize: 18,
-      //       ),
-      //     ),
-      //     Padding(
-      //       padding:
-      //           const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 20),
-      //       child: Container(
-      //         decoration: const BoxDecoration(
-      //             color: Colors.white,
-      //             borderRadius: BorderRadius.only(
-      //                 topLeft: Radius.circular(8),
-      //                 bottomLeft: Radius.circular(8),
-      //                 bottomRight: Radius.circular(8),
-      //                 topRight: Radius.circular(8))),
-      //         child: Row(
-      //           children: [
-
-      //     Padding(
-      //       padding: const EdgeInsets.only(top: 8, bottom: 12),
-      //       child: Align(
-      //         alignment: Alignment.topRight,
-      //         child: MouseRegion(
-      //         cursor: SystemMouseCursors.click,
-      //           child: GestureDetector(
-      //             onTap: () {
-      //               showResetPasswordDialog();
-      //             },
-      //             child: Text(
-      //               tr("reset_password"),
-      //               style: const TextStyle(
-      //                 decoration: TextDecoration.underline,
-      //                 color: Colors.white,
-      //                 fontSize: 15,
-      //                 fontWeight: FontWeight.w500),
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //     Padding(
-      //       padding: const EdgeInsets.only(top: 10.0, bottom: 8),
-      //       child: MouseRegion(
-      //         cursor: SystemMouseCursors.click,
-      //         child: Center(
-      //             child: GestureDetector(
-      //           onTap: () => widget.switchBody(null),
-      //           child:  RichText(
-      //             textAlign: TextAlign.center,
-      //             text: TextSpan(
-      //               text: tr("no_account"),
-      //               style: const TextStyle(
-      //                 color: Colors.white,
-      //                 fontSize: 15,
-      //                 fontWeight: FontWeight.w500),
-      //               children: [
-      //                 TextSpan(
-      //                   text: tr("signin_hint"),
-      //                   style: const TextStyle(
-      //                   color: Colors.white,
-      //                   fontSize: 17,
-      //                   fontWeight: FontWeight.bold),
-      //                 )
-      //               ]
-      //             )
-      //           ),
-      //         )),
-      //       ),
-      //     ),
-
-      //  ],
-      // ),
     );
   }
 

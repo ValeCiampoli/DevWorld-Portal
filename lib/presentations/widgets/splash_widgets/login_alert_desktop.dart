@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:portal/commons/theme.dart';
 import 'package:provider/provider.dart';
  import 'package:portal/data/models/login_provider_result_model.dart';
 import 'package:portal/presentations/state_management/auth_provider.dart';
@@ -39,146 +40,115 @@ class _LogInAlertDesktopState extends State<LogInAlertDesktop> {
           Text(
             tr("enter_mail"),
             style: const TextStyle(
-              color: Colors.white,
+              color: Color.fromARGB(255, 184, 183, 183),
               fontSize: 18,
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 20),
-            child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                      topRight: Radius.circular(8))),
-              child: Row(
-                children: [
-                  SizedBox(
-                      height: 37,
-                      width: 270,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Il campo email è vuoto';
-                            } else if (!RegExp(
-                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+")
-                                .hasMatch(emailController.text)) {
-                              return "inserisci una mail valida";
-                            }
-                            return null;
-                          },
-                          controller: emailController,
-                          maxLines: 1,
-                          decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(bottom: 8, left: 10),
-                              hintStyle:
-                                  TextStyle(fontWeight: FontWeight.w500),
-                              border: InputBorder.none,
-                              hintText: "Email"),
-                        ),
-                      )),
-                ],
+            padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 20),
+            child: SizedBox(
+                height: 37,
+                width: 350,
+                child: TextFormField(
+              controller: emailController,
+              validator: (value) {
+                if (value!.isEmpty) {
+                return 'Il campo email è vuoto';
+                } else if (!RegExp(
+                      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^`{|}~]+@[a-zA-Z0-9]+.[a-zA-Z]+")
+                  .hasMatch(emailController.text)) {
+                return "inserisci una mail valida";
+                }
+                return null;
+              },
+              style: DWTextTypography.of(context).text18,
+              decoration: InputDecoration(
+                enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+                ),
+                hintText: 'Inserisci mail',
+                hintStyle: DWTextTypography.of(context).text16,
               ),
-            ),
+            )),
           ),
            Text(
             tr("enter_password"),
             style: const TextStyle(
-              color: Colors.white,
+              color: Color.fromARGB(255, 184, 183, 183),
               fontSize: 18,
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 20),
-            child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                      topRight: Radius.circular(8))),
-              child: Row(
-                children: [
-                  SizedBox(
-                      height: 37,
-                      width: 270,
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Inerisci una password';
-                            }
-                            return null;
-                          },
-                          controller: passwordController,
-                          obscureText: true,
-                          maxLines: 1,
-                          decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(bottom: 8, left: 10),
-                              hintStyle:
-                                  TextStyle(fontWeight: FontWeight.w500),
-                              border: InputBorder.none,
-                              hintText: "Password"),
-                        ),
-                      )),
-                ],
+            padding: const EdgeInsets.only(top: 4, left: 4, right: 4, bottom: 20),
+            child: SizedBox(
+                height: 37,
+                width: 350,
+                child: TextFormField(
+              obscureText: true,
+              controller: passwordController,
+              style: DWTextTypography.of(context).text18,
+              decoration: InputDecoration(
+                enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white),
+                ),
+                hintText: 'Inserisci password',
+                hintStyle: DWTextTypography.of(context).text16,
               ),
-            ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                return 'Inerisci una password';
+                }
+                return null;
+              },
+            )),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 00.0),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () async{
-                  if(formKey.currentState!.validate())
-                  {
-                    await authProvider.signInWithEmailAndPassword(emailController.text, passwordController.text);
-                    if(mounted){
-                      if(authProvider.status == Status.unauthenticated){
-                        showDialog(
-                          context: context,
-                          builder: (context) =>  AlertDialog(
-                            content: Text(
-                              tr("login_error")
-                            ),
-                            actions: const [],)
-                        );
-                      }else{
-                        AutoRouter.of(context).pop();
-                      }
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () async{
+                if(formKey.currentState!.validate())
+                {
+                  await authProvider.signInWithEmailAndPassword(emailController.text, passwordController.text);
+                  if(mounted){
+                    if(authProvider.status == Status.unauthenticated){
+                      showDialog(
+                        context: context,
+                        builder: (context) =>  AlertDialog(
+                          content: Text(
+                            tr("login_error")
+                          ),
+                          actions: const [],)
+                      );
+                    }else{
+                      AutoRouter.of(context).pop();
                     }
                   }
-                },
-                child: Center(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.all(Radius.circular(12))),
-                    constraints: const BoxConstraints(
-                        maxHeight: 45,
-                        maxWidth: 400,
-                        minHeight: 30,
-                        minWidth: 100),
-                    child:  Center(
-                        child: Text(
-                       tr("login"),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500),
-                    )),
-                  ),
+                }
+              },
+              child: Center(
+                child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                  constraints: const BoxConstraints(
+                      maxHeight: 45,
+                      maxWidth: 400,
+                      minHeight: 30,
+                      minWidth: 100),
+                  child:  Center(
+                      child: Text(
+                     tr("login"),
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500),
+                  )),
                 ),
               ),
             ),
@@ -233,8 +203,7 @@ class _LogInAlertDesktopState extends State<LogInAlertDesktop> {
                 ),
               )),
             ),
-          ),
-         
+          ),        
        ],
       ),
     );

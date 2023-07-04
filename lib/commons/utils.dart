@@ -178,3 +178,8 @@ Future<PlatformFile?> fileFromStorage(List<String> extension) async {
         return Colors.blue;
     }
   }
+
+ bool isValidTimeRange(DateTime startTime, DateTime endTime, DateTime newStartTime, DateTime newEndTime) {
+    return ((newStartTime.hour > startTime.hour) || (newStartTime.hour == startTime.hour && newStartTime.minute >= startTime.minute))
+        && ((newEndTime.hour < endTime.hour) || (newEndTime.hour == endTime.hour && newEndTime.minute <= endTime.minute));
+  }

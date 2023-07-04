@@ -1567,10 +1567,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
               content: SizedBox(
                 width: 800,
                 height: 500,
-                child: Consumer2<NewAppointmentProvider,
-                        AppointmentDetailProvider>(
-                    builder:
-                        (context, appointmentProvider, detailProvider, child) {
+                child: Consumer3<NewAppointmentProvider,
+                        AppointmentDetailProvider, AppointmentListProvider>(
+                    builder: (context, appointmentProvider, detailProvider,
+                        appointmentListProvider, child) {
                   return Column(children: [
                     Wrap(
                       children: [
@@ -2282,29 +2282,75 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                           '${dateStartController.text} ${hourDateStartController.text}:00');
                                       var parsedEndDate = format.parse(
                                           '${dateEndController.text} ${hourDateEndController.text}:00');
-                                      context
-                                          .read<NewAppointmentProvider>()
-                                          .publishAppoitnemt(
-                                              userIds: selectedIdsList,
-                                              id: firestoreId(),
-                                              color: chooseColor(selectedColor),
-                                              subject:
-                                                  meetingNameController.text,
-                                              startDate: parsedStartDate,
-                                              endDate: parsedEndDate,
-                                              url: urlController.text);
+                                      for (var user in selectedIdsList) {
+                                        await context
+                                            .read<AppointmentListProvider>()
+                                            .getAppointmentsById(user);
+                                        var checkedAppointment =
+                                            appointmentListProvider
+                                                .appointmentListByMe;
+                                        if (checkedAppointment != null) {
+                                          for (var appointment
+                                              in checkedAppointment) {
+                                            if (isValidTimeRange(
+                                                appointment.startTime,
+                                                appointment.endTime,
+                                                parsedStartDate,
+                                                parsedEndDate)) {
+                                              context
+                                                  .read<
+                                                      NewAppointmentProvider>()
+                                                  .publishAppoitnemt(
+                                                      userIds: selectedIdsList,
+                                                      id: firestoreId(),
+                                                      color: chooseColor(
+                                                          selectedColor),
+                                                      subject:
+                                                          meetingNameController
+                                                              .text,
+                                                      startDate:
+                                                          parsedStartDate,
+                                                      endDate: parsedEndDate,
+                                                      url: urlController.text);
+                                            }
+                                          }
+                                        }
+                                      }
                                     } else {
-                                      await context
-                                          .read<NewAppointmentProvider>()
-                                          .publishAppoitnemt(
-                                              userIds: selectedIdsList,
-                                              id: firestoreId(),
-                                              color: chooseColor(selectedColor),
-                                              subject:
-                                                  meetingNameController.text,
-                                              startDate: defaulStartTime,
-                                              endDate: defaultEndTime,
-                                              url: urlController.text);
+                                      for (var user in selectedIdsList) {
+                                        await context
+                                            .read<AppointmentListProvider>()
+                                            .getAppointmentsById(user);
+                                        var checkedAppointment =
+                                            appointmentListProvider
+                                                .appointmentListByMe;
+                                        if (checkedAppointment != null) {
+                                          for (var appointment
+                                              in checkedAppointment) {
+                                            if (isValidTimeRange(
+                                                appointment.startTime,
+                                                appointment.endTime,
+                                                defaulStartTime,
+                                                defaultEndTime)) {
+                                              await context
+                                                  .read<
+                                                      NewAppointmentProvider>()
+                                                  .publishAppoitnemt(
+                                                      userIds: selectedIdsList,
+                                                      id: firestoreId(),
+                                                      color: chooseColor(
+                                                          selectedColor),
+                                                      subject:
+                                                          meetingNameController
+                                                              .text,
+                                                      startDate:
+                                                          defaulStartTime,
+                                                      endDate: defaultEndTime,
+                                                      url: urlController.text);
+                                            }
+                                          }
+                                        }
+                                      }
                                     }
                                     if (mounted) {
                                       AutoRouter.of(context).pop(true);
@@ -2314,7 +2360,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     }
                                   }
                                 },
-                                color: Colors.blue,
+                                color: Colors.purple,
                                 child: const Text(
                                   'Conferma',
                                   style: TextStyle(color: Colors.white),
